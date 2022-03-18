@@ -8,6 +8,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
@@ -22,26 +23,15 @@ public class TaskController {
         this.service = service;
     }
 
-    @GetMapping("/add-task")
-    public String addTask(Model model) {
-        model.addAttribute("task", Task.builder().build());
-        model.addAttribute("current_operation", "Adding new task");
-        return "books/add-edit";
+    @PostMapping("/addTask")
+    public Task addTask(@RequestBody @Valid Task task) {
+       return service.saveTask(task);
     }
 
-//    @PostMapping("/task-save")
-//    public String saveBook(@Valid Task task, BindingResult bindingResult, Model model) {
-//        if (bindingResult.hasErrors()) {
-//            model.addAttribute("task", task);
-//            List<ObjectError> allErrors = bindingResult.getAllErrors();
-//            for (ObjectError allError : allErrors) {
-//                System.out.println(allError.getDefaultMessage());
-//            }
-//            log.warn("task is not valid");
-//            return "books/add-edit";
-//        }
-//        Task saved = service.saveTask(task);
-//        return "redirect:/books/" + saved.getId();
-//
-//    }
+    @GetMapping("/allTasks")
+    public List<Task> getList(){
+        return service.getAllTasks();
+    }
 }
+
+

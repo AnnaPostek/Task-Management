@@ -5,6 +5,7 @@ import com.example.taskmanagement.model.User;
 import com.example.taskmanagement.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -19,6 +20,10 @@ public class UserService {
         return repository.findAll();
     }
 
+    @Transactional
+    public User addUser(User user) {
+        return repository.save(user);
+    }
     public User getUserById(long id) {
         return repository.findById(id)
                 .orElseThrow(()-> {
