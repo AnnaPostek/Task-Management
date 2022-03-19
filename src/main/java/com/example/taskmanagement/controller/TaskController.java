@@ -3,11 +3,6 @@ package com.example.taskmanagement.controller;
 import com.example.taskmanagement.model.Task;
 import com.example.taskmanagement.model.User;
 import com.example.taskmanagement.service.TaskService;
-import com.example.taskmanagement.service.UserService;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -24,17 +19,17 @@ public class TaskController {
 
     @PostMapping("/addTask")
     public Task addTask(@RequestBody @Valid Task task) {
-       return service.saveTask(task);
+        return service.saveTask(task);
     }
 
     @GetMapping("/allTasks")
-    public List<Task> getList(){
+    public List<Task> getList() {
         return service.getAllTasks();
     }
 
-    @PostMapping("/tasks/addUser/{taskId}")
+    @PostMapping("/task/addUser/{taskId}")
     public Task addUser(@PathVariable Long taskId, @RequestBody User user) {
-       return service.addUserToTask(taskId, user);
+        return service.addUserToTask(taskId, user);
     }
 
     @GetMapping("/getTask/{id}")
@@ -42,9 +37,24 @@ public class TaskController {
         return service.getTaskById(id);
     }
 
+    @PutMapping("/updateTask/{id}")
+    public Task updateTask(@PathVariable Long id, @RequestBody Task toUpdate) {
+        return service.updateTask(id, toUpdate);
+    }
+
+    @PutMapping("/task/changeStatus/{id}")
+    public Task changeStatus(@PathVariable Long id, @RequestBody Task task) {
+        return service.changeStatus(id, task.getStatus());
+    }
+
     @GetMapping("/taskList/{userId}")
     public List<Task> allTaskByUser(@PathVariable Long userId) {
         return service.findTaskListForUserByDateAsc(userId);
+    }
+
+    @DeleteMapping("/deleteTask/{id}")
+    public void deleteTask(@PathVariable Long id) {
+        service.deleteTask(id);
     }
 }
 

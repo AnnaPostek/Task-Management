@@ -10,6 +10,7 @@ import com.example.taskmanagement.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
 import java.util.List;
 
 @Service
@@ -33,10 +34,11 @@ public class TaskService {
 
     public Task updateTask(Long id, Task toUpdate) {
         Task task = findTaskById(id);
-        task.setTitle(task.getTitle());
-        task.setDescription(task.getDescription());
-        task.setDeadline(task.getDeadline());
-        task.setStatus(task.getStatus());
+        task.setTitle(toUpdate.getTitle());
+        task.setDescription(toUpdate.getDescription());
+        task.setDeadline(toUpdate.getDeadline());
+        task.setStatus(toUpdate.getStatus());
+        task.setUsers(toUpdate.getUsers());
         return repository.save(task);
     }
 
@@ -44,22 +46,10 @@ public class TaskService {
         repository.deleteById(id);
     }
 
-    public void changeStatusForCancel(long id) {
+    public Task changeStatus(long id, Status status) {
         Task task = findTaskById(id);
-        task.setStatus(Status.CANCEL);
-        repository.save(task);
-    }
-
-    public void changeStatusForDone(long id) {
-        Task task = findTaskById(id);
-        task.setStatus(Status.DONE);
-        repository.save(task);
-    }
-
-    public void changeStatusForInProgress(long id) {
-        Task task = findTaskById(id);
-        task.setStatus(Status.IN_PROGRESS);
-        repository.save(task);
+        task.setStatus(status);
+      return  repository.save(task);
     }
 
     @Transactional
