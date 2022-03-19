@@ -15,7 +15,7 @@ public class UserController {
         this.service = service;
     }
 
-    @GetMapping("/allUser")
+    @GetMapping("/allUsers")
     public List<User> getList() {
         return service.getAllUsers();
     }
@@ -25,6 +25,10 @@ public class UserController {
         return service.addUser(user);
     }
 
+    @PostMapping("/userCancel/{id}")
+    public void deleteUser(@PathVariable Long id) {
+         service.deleteUser(id);
+    }
     @GetMapping("/user/{name}")
     public List<User> list (@PathVariable String name) {
        return service.getUserListbyName(name);

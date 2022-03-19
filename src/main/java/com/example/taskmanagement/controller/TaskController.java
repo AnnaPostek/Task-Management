@@ -43,7 +43,7 @@ public class TaskController {
     }
 
     @GetMapping("/taskList/{userId}")
-    public List<Task> allUser(@PathVariable Long userId) {
+    public List<Task> allTaskByUser(@PathVariable Long userId) {
         return service.findTaskListForUserByDateAsc(userId);
     }
 }
