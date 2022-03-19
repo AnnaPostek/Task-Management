@@ -18,7 +18,6 @@ import javax.validation.constraints.NotBlank;
 @Data
 @Builder
 @NoArgsConstructor
-@AllArgsConstructor
 @Table(name="tasks")
 public class Task {
     @Id
@@ -34,10 +33,29 @@ public class Task {
     @ManyToMany
     private List<User> users = new ArrayList<>();
 
+    public Task(long id, String title) {
+        this.id = id;
+        this.title = title;
+    }
 
-    public void addUser(User... manyUsers) {
-        for (User user : manyUsers) {
-            users.add(user);
-        }
+    public Task(long id, String title, String description, Status status, LocalDateTime deadline) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.status = status;
+        this.deadline = deadline;
+    }
+
+    public Task(long id, String title, String description, Status status, LocalDateTime deadline, List<User> users) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.status = status;
+        this.deadline = deadline;
+        this.users = users;
+    }
+
+    public void addUser(User user) {
+        this.users.add(user);
     }
 }

@@ -5,10 +5,12 @@ import com.example.taskmanagement.model.Status;
 import com.example.taskmanagement.model.Task;
 import com.example.taskmanagement.model.User;
 import com.example.taskmanagement.repository.TaskRepository;
+import com.example.taskmanagement.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TaskService {
@@ -51,13 +53,22 @@ public class TaskService {
         task.setStatus(Status.DONE);
         repository.save(task);
     }
+
     public void changeStatusForInProgress(long id) {
         Task task = findTaskById(id);
         task.setStatus(Status.IN_PROGRESS);
         repository.save(task);
     }
+
     @Transactional
     public Task saveTask(Task task) {
+        return repository.save(task);
+    }
+
+    @Transactional
+    public Task addUserToTask(Long taskId, User user) {
+        Task task = findTaskById(taskId);
+        task.addUser(user);
         return repository.save(task);
     }
 
