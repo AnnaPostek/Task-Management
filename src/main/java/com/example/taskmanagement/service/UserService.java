@@ -45,4 +45,8 @@ public class UserService {
     public void deleteUser(long id) {
         repository.deleteById(id);
     }
+
+    public List<User> getUserListbyName(String name) {
+       return repository.findAllByNameOrderBySurname(name);
+    }
 }

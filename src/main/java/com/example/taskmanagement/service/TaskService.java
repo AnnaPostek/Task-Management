@@ -1,6 +1,7 @@
 package com.example.taskmanagement.service;
 
 import com.example.taskmanagement.exception.TaskNotFoundException;
+import com.example.taskmanagement.exception.UserNotFoundException;
 import com.example.taskmanagement.model.Status;
 import com.example.taskmanagement.model.Task;
 import com.example.taskmanagement.model.User;
@@ -10,15 +11,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class TaskService {
 
     private TaskRepository repository;
+    private UserRepository userRepository;
 
-    public TaskService(TaskRepository repository) {
+    public TaskService(TaskRepository repository, UserRepository userRepository) {
         this.repository = repository;
+        this.userRepository = userRepository;
     }
 
     public List<Task> getAllTasks() {
@@ -79,9 +81,12 @@ public class TaskService {
                 });
     }
 
-    public void userAssign(Task task, User user) {
-        task.addUser(user);
-        repository.save(task);
+
+    public List<Task> findTaskListForUserByDateAsc(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> {
+            throw new UserNotFoundException(String.format("User with this id = %d not found", userId));
+        });
+        return repository.findByUsersOrderByDeadlineAsc(user);
     }
 
 }

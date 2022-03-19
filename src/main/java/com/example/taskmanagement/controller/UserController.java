@@ -1,12 +1,8 @@
 package com.example.taskmanagement.controller;
 
-import com.example.taskmanagement.model.Task;
 import com.example.taskmanagement.model.User;
 import com.example.taskmanagement.service.UserService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -29,4 +25,8 @@ public class UserController {
         return service.addUser(user);
     }
 
+    @GetMapping("/user/{name}")
+    public List<User> list (@PathVariable String name) {
+       return service.getUserListbyName(name);
+    }
 }
