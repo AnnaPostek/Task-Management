@@ -16,7 +16,7 @@ In the beggining of instalation you need to install java 11+ and maven
 First step in clone the Git repository:
 
 $ git clone https://github.com/AnnaPostek/Task-Management
-$ cd Note
+$ cd Task-Management
 
 Once the clone is done, run below
 
