@@ -1,8 +1,7 @@
 # Task-Management
-This application is webservise which accept HTTP call for CRUD tasks. For one task can be added more that one user. 
+This application is webservise which accept HTTP call for CRUD tasks. API is responsible for managing and storing in H2 database tasks. For one task can be added one or more than one user. User also can has one or more tasks. User and Task have validation data.
 
-API is responsible for managing and storing in H2 database tasks.
-Application is using Java 11, Spring Boot, Spring Data JPA, Maven, Lombok, H2, Swagger
+Application is using Java 11, Spring Boot, Spring Data JPA, Maven, Lombok, H2, Junit, Swagger
 
 
 ## Installation
@@ -88,3 +87,6 @@ curl -X PUT "http://localhost:8080/task/5" -H "accept: */*" -H "Content-Type: ap
 
 
 Similarly tests are possible with User Controller.
+
+## Exceptions
+On application is used also 
