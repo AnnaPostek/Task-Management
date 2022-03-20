@@ -1,6 +1,6 @@
 package com.example.taskmanagement.controller;
 
-import com.example.taskmanagement.exception.TaskNotFoundException;
+
 import com.example.taskmanagement.exception.UserNotFoundException;
 import com.example.taskmanagement.model.User;
 import com.example.taskmanagement.service.UserService;
@@ -14,6 +14,7 @@ import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 
 @RestController
 public class UserController {
@@ -51,7 +52,6 @@ public class UserController {
         List<User> userList = service.getUserListByNameOrdered(name);
         return new ResponseEntity<>(userList, HttpStatus.OK);
     }
-
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(value = UserNotFoundException.class)
     public ResponseEntity<Object> exception(UserNotFoundException exception) {

@@ -37,7 +37,7 @@ public class TaskController {
     }
 
     @PostMapping("/task/user/{taskId}")
-    public ResponseEntity<Task> addUser(@PathVariable Long taskId, @RequestBody User user) {
+    public ResponseEntity<Task> addUser(@PathVariable Long taskId, @RequestBody @Valid User user) {
         Task task = service.addUserToTask(taskId, user);
         return new ResponseEntity<>(task, HttpStatus.OK);
     }
@@ -54,13 +54,13 @@ public class TaskController {
         return new ResponseEntity<>(task, HttpStatus.OK);
     }
 
-    @PutMapping("/task/changeStatus/{id}")
-    public ResponseEntity<Task> changeStatus(@PathVariable Long id, @RequestBody Task task) {
+    @PutMapping("/task/status/{id}")
+    public ResponseEntity<Task> changeStatus(@PathVariable Long id, @RequestBody @Valid Task task) {
         Task taskStatus = service.changeStatus(id, task.getStatus());
         return new ResponseEntity<>(taskStatus, HttpStatus.OK);
     }
 
-    @GetMapping("/taskList/{userId}")
+    @GetMapping("/tasks/{userId}")
     public ResponseEntity<List<Task>> allTaskByUser(@PathVariable Long userId) {
         List<Task> taskListOrdered = service.findTaskListForUserByDateAsc(userId);
         return new ResponseEntity<>(taskListOrdered, HttpStatus.OK);
@@ -75,13 +75,6 @@ public class TaskController {
             throw new TaskNotFoundException();
         }
     }
-
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(value = TaskNotFoundException.class)
-    public ResponseEntity<Object> exception(TaskNotFoundException exception) {
-        return new ResponseEntity<>("Task not found", HttpStatus.NOT_FOUND);
-    }
-
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Map<String, String> handleValidExceptions(MethodArgumentNotValidException ex) {
@@ -92,6 +85,12 @@ public class TaskController {
             errors.put(fieldName, errorMessage);
         });
         return errors;
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(value = TaskNotFoundException.class)
+    public ResponseEntity<Object> exception(TaskNotFoundException exception) {
+        return new ResponseEntity<>("Task not found", HttpStatus.NOT_FOUND);
     }
 }
 
