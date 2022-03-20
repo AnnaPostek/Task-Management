@@ -88,5 +88,3 @@ curl -X PUT "http://localhost:8080/task/5" -H "accept: */*" -H "Content-Type: ap
 
 Similarly tests are possible with User Controller.
 
-## Exceptions
-On application is used also 
