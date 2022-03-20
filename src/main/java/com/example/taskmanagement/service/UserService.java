@@ -31,22 +31,15 @@ public class UserService {
                 });
     }
 
-    public User updateUser(long id, User toUpdate) {
-        User user = repository.findById(id)
-                .orElseThrow(() -> {
-                    throw new UserNotFoundException(String.format("User with this id = %d not found", id));
-                });
-        user.setName(toUpdate.getName());
-        user.setSurname(toUpdate.getSurname());
-        user.setEmail(toUpdate.getEmail());
-        return repository.save(user);
+    public boolean userExistById(Long id) {
+        return repository.existsById(id);
     }
 
     public void deleteUser(long id) {
         repository.deleteById(id);
     }
 
-    public List<User> getUserListbyName(String name) {
+    public List<User> getUserListByNameOrdered(String name) {
        return repository.findAllByNameOrderBySurname(name);
     }
 }
