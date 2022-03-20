@@ -42,14 +42,18 @@ public class TaskService {
         return repository.save(task);
     }
 
-    public void deleteTask(long id) {
+    public void deleteTask(Long id) {
         repository.deleteById(id);
     }
 
-    public Task changeStatus(long id, Status status) {
+    public boolean taskExistsById(Long id) {
+        return repository.existsById(id);
+    }
+
+    public Task changeStatus(Long id, Status status) {
         Task task = findTaskById(id);
         task.setStatus(status);
-      return  repository.save(task);
+        return repository.save(task);
     }
 
     @Transactional

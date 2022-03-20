@@ -1,12 +1,19 @@
 package com.example.taskmanagement.controller;
 
+import com.example.taskmanagement.exception.TaskNotFoundException;
 import com.example.taskmanagement.model.Task;
 import com.example.taskmanagement.model.User;
 import com.example.taskmanagement.service.TaskService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class TaskController {
@@ -17,44 +24,74 @@ public class TaskController {
         this.service = service;
     }
 
-    @PostMapping("/addTask")
-    public Task addTask(@RequestBody @Valid Task task) {
-        return service.saveTask(task);
+    @PostMapping("/task")
+    public ResponseEntity<Task> addTask(@RequestBody @Valid Task task) {
+        Task savedTask = service.saveTask(task);
+        return new ResponseEntity<>(savedTask, HttpStatus.CREATED);
     }
 
-    @GetMapping("/allTasks")
-    public List<Task> getList() {
-        return service.getAllTasks();
+    @GetMapping("/tasks")
+    public ResponseEntity<List<Task>> getList() {
+        List<Task> allTasks = service.getAllTasks();
+        return new ResponseEntity<>(allTasks, HttpStatus.OK);
     }
 
-    @PostMapping("/task/addUser/{taskId}")
-    public Task addUser(@PathVariable Long taskId, @RequestBody User user) {
-        return service.addUserToTask(taskId, user);
+    @PostMapping("/task/user/{taskId}")
+    public ResponseEntity<Task> addUser(@PathVariable Long taskId, @RequestBody User user) {
+        Task task = service.addUserToTask(taskId, user);
+        return new ResponseEntity<>(task, HttpStatus.OK);
     }
 
-    @GetMapping("/getTask/{id}")
-    public Task getTask(@PathVariable Long id) {
-        return service.getTaskById(id);
+    @GetMapping("/task/{id}")
+    public ResponseEntity<Task> getTask(@PathVariable Long id) {
+        Task taskById = service.getTaskById(id);
+        return new ResponseEntity<>(taskById, HttpStatus.OK);
     }
 
-    @PutMapping("/updateTask/{id}")
-    public Task updateTask(@PathVariable Long id, @RequestBody Task toUpdate) {
-        return service.updateTask(id, toUpdate);
+    @PutMapping("/task/{id}")
+    public ResponseEntity<Task> updateTask(@PathVariable Long id, @RequestBody Task toUpdate) {
+        Task task = service.updateTask(id, toUpdate);
+        return new ResponseEntity<>(task, HttpStatus.OK);
     }
 
     @PutMapping("/task/changeStatus/{id}")
-    public Task changeStatus(@PathVariable Long id, @RequestBody Task task) {
-        return service.changeStatus(id, task.getStatus());
+    public ResponseEntity<Task> changeStatus(@PathVariable Long id, @RequestBody Task task) {
+        Task taskStatus = service.changeStatus(id, task.getStatus());
+        return new ResponseEntity<>(taskStatus, HttpStatus.OK);
     }
 
     @GetMapping("/taskList/{userId}")
-    public List<Task> allTaskByUser(@PathVariable Long userId) {
-        return service.findTaskListForUserByDateAsc(userId);
+    public ResponseEntity<List<Task>> allTaskByUser(@PathVariable Long userId) {
+        List<Task> taskListOrdered = service.findTaskListForUserByDateAsc(userId);
+        return new ResponseEntity<>(taskListOrdered, HttpStatus.OK);
     }
 
-    @DeleteMapping("/deleteTask/{id}")
-    public void deleteTask(@PathVariable Long id) {
-        service.deleteTask(id);
+    @DeleteMapping("/task/{id}")
+    public ResponseEntity<String> deleteTask(@PathVariable Long id) {
+        if (service.taskExistsById(id)) {
+            service.deleteTask(id);
+            return new ResponseEntity<>(String.format("Task with id = %d is deleted successfully", id), HttpStatus.OK);
+        } else {
+            throw new TaskNotFoundException();
+        }
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(value = TaskNotFoundException.class)
+    public ResponseEntity<Object> exception(TaskNotFoundException exception) {
+        return new ResponseEntity<>("Task not found", HttpStatus.NOT_FOUND);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public Map<String, String> handleValidExceptions(MethodArgumentNotValidException ex) {
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getAllErrors().forEach((error) -> {
+            String fieldName = ((FieldError) error).getField();
+            String errorMessage = error.getDefaultMessage();
+            errors.put(fieldName, errorMessage);
+        });
+        return errors;
     }
 }
 
