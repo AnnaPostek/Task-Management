@@ -18,6 +18,7 @@ import javax.validation.constraints.NotBlank;
 @Data
 @Builder
 @NoArgsConstructor
+@AllArgsConstructor
 @Table(name="tasks")
 public class Task {
     @Id
@@ -30,34 +31,13 @@ public class Task {
     private Status status;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime deadline;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "task_user",
             joinColumns = @JoinColumn(name="task_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     private List<User> users = new ArrayList<>();
 
-    public Task(long id, String title) {
-        this.id = id;
-        this.title = title;
-    }
-
-    public Task(long id, String title, String description, Status status, LocalDateTime deadline) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.status = status;
-        this.deadline = deadline;
-    }
-
-    public Task(long id, String title, String description, Status status, LocalDateTime deadline, List<User> users) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.status = status;
-        this.deadline = deadline;
-        this.users = users;
-    }
 
     public void addUser(User user) {
         this.users.add(user);
