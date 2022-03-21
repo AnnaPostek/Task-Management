@@ -64,6 +64,85 @@ Task is added to database.
 
 ![image](https://user-images.githubusercontent.com/56793192/159184316-c0bfc680-4cd6-4111-ae1d-dbf628b517c3.png)
 
+## Add users to Task
+According to assumption for one task can resposible more than one user. I've added on Postman relations users with endpoint /task/user/{taskId} with tasks accoring below:
+
+[
+    {
+        "id": 4,
+        "title": "Java Learning",
+        "description": "SpringBoot application",
+        "status": "IN_PROGRESS",
+        "deadline": "2022-03-18 12:00:00",
+        "users": [
+            {
+                "id": 1,
+                "name": "Anna",
+                "surname": "Nowak",
+                "email": "anna.nowak@gmail.com"
+            },
+            {
+                "id": 2,
+                "name": "Jan",
+                "surname": "Kowalski",
+                "email": "jan.kowalski@gmail.com"
+            }
+        ]
+    },
+    {
+        "id": 5,
+        "title": "Javascript Learning",
+        "description": "React JS course",
+        "status": "CANCEL",
+        "deadline": "2022-03-30 15:00:00",
+        "users": [
+            {
+                "id": 2,
+                "name": "Jan",
+                "surname": "Kowalski",
+                "email": "jan.kowalski@gmail.com"
+            },
+            {
+                "id": 3,
+                "name": "Grzegorz",
+                "surname": "Perk",
+                "email": "grzegorz.perk@gmail.com"
+            }
+        ]
+    },
+    {
+        "id": 6,
+        "title": "Active Break",
+        "description": "Joga exercises",
+        "status": "DONE",
+        "deadline": "2022-02-18 09:00:00",
+        "users": [
+            {
+                "id": 3,
+                "name": "Grzegorz",
+                "surname": "Perk",
+                "email": "grzegorz.perk@gmail.com"
+            },
+            {
+                "id": 1,
+                "name": "Anna",
+                "surname": "Nowak",
+                "email": "anna.nowak@gmail.com"
+            }
+        ]
+    }
+]
+
+This relations gives us third tables which join primiry keys from two tables users and tasks
+
+![image](https://user-images.githubusercontent.com/56793192/159221959-62974fe6-b172-42b4-b4de-636b5de42134.png)
+
+## Get List all task by User
+Below is usage of GET endpoint /tasks/{userId} which show tasks for exactly user. The list is ordered by deadline ascending
+
+![image](https://user-images.githubusercontent.com/56793192/159222337-b5ae1b30-656e-4850-bce6-38d49f9147a6.png)
+
+
 ## Delete task
 Below is example of usage delete endpoint on Postman
 
