@@ -27,7 +27,7 @@ public class TaskController {
     @PostMapping("/task")
     public ResponseEntity<Task> addTask(@RequestBody @Valid Task task) {
         Task savedTask = service.saveTask(task);
-        return new ResponseEntity<>(savedTask, HttpStatus.CREATED);
+        return new ResponseEntity<>(task, HttpStatus.CREATED);
     }
 
     @GetMapping("/tasks")
